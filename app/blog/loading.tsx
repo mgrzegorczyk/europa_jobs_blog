@@ -1,0 +1,9 @@
+import Skeleton from "@/components/Skeleton";
+
+export default function Loading() {
+    return <div>
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+    </div>
+}
