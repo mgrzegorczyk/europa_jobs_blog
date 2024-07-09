@@ -1,5 +1,4 @@
 import PostDetails, {PostDetailsData} from "@/components/PostDetails";
-import {composeScalar} from "yaml/dist/compose/compose-scalar";
 
 interface PostDetailsProps {
     params: {
