@@ -1,6 +1,7 @@
 import React from 'react';
 import JobOfferCard, { JobOffer } from './JobOfferCard';
 import RecommendedPostCard, { RecommendedPost } from './RecommendedPostCard';
+import Image from "next/image";
 
 export interface PostDetailsData {
     title: string;
@@ -31,10 +32,13 @@ export default function PostDetails({ params }: PostDetailsProps) {
         <div className="max-w-4xl mx-auto p-5">
             <h1 className="text-4xl font-bold mb-5">{postDetails.title}</h1>
             {postDetails.mediaUrl && (
-                <img
+                <Image
                     src={postDetails.mediaUrl}
                     alt={postDetails.title}
                     className="w-full h-auto rounded-lg mb-5"
+                    layout="responsive"
+                    width={16}
+                    height={9}
                 />
             )}
             {postDetails.lastEditedAt && (

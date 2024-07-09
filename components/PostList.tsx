@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from "next/image";
 
 
 export interface PostListItem {
@@ -24,10 +25,13 @@ export default function PostList({ posts }: PostListProps) {
                 <Link href={`blog/post/${post.key}`} key={post.id}>
                     <div className="flex bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                         <div className="w-1/3 md:w-1/4">
-                            <img
+                            <Image
                                 src={post.mediaUrl}
                                 alt={post.title}
                                 className="w-full h-full object-cover"
+                                layout="responsive"
+                                width={16}
+                                height={9}
                             />
                         </div>
                         <div className="flex flex-col justify-center p-4 w-2/3 md:w-3/4">
