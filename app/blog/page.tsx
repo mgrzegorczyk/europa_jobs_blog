@@ -1,23 +1,25 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 import PostList, { PostListItem } from "@/components/PostList";
 import Paginator from "@/components/Paginator";
 import Spinner from "@/components/Spinner";
+import ContextSwitch from "@/components/ContextSwitch";
+import Search from "@/components/Search";
 
 export interface PostListData {
-    categoryName: string,
-    countryEnum: string,
-    isNews: boolean,
-    isGeneralWorkingAbroadInformations: boolean,
-    items: PostListItem[],
-    itemsCount: number,
-    currentPage: number,
-    totalPages: number,
+    categoryName: string;
+    countryEnum: string;
+    isNews: boolean;
+    isGeneralWorkingAbroadInformations: boolean;
+    items: PostListItem[];
+    itemsCount: number;
+    currentPage: number;
+    totalPages: number;
 }
 
-const fetchPosts = async (pageNumber: number): Promise<PostListData> => {
-    const res = await fetch(`https://api.europa.jobs/blog?Type=candidate&pageNumber=${pageNumber}`);
+const fetchPosts = async (pageNumber: number, type: string, searchPhrase: string): Promise<PostListData> => {
+    const res = await fetch(`https://api.europa.jobs/blog?Type=${type}&pageNumber=${pageNumber}&searchPhrase=${searchPhrase}`);
     if (!res.ok) {
         throw new Error('Failed to fetch posts');
     }
@@ -32,13 +34,15 @@ export default function BlogPage() {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [inputPage, setInputPage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [type, setType] = useState<string>('candidate');
+    const [searchPhrase, setSearchPhrase] = useState<string>("");
 
-    const fetchAndSetPosts = async (pageNumber: number) => {
+    const fetchAndSetPosts = async (pageNumber: number, type: string, searchPhrase: string) => {
         setLoading(true);
         try {
-            const data = await fetchPosts(pageNumber);
+            const data = await fetchPosts(pageNumber, type, searchPhrase);
             setPosts(data.items);
-            setCurrentPage(data.currentPage);
+            setCurrentPage(data.currentPage > 0 ? data.currentPage : 1);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Failed to fetch posts', error);
@@ -48,8 +52,12 @@ export default function BlogPage() {
     };
 
     useEffect(() => {
-        fetchAndSetPosts(currentPage);
-    }, [currentPage]);
+        const delayDebounceFn = setTimeout(() => {
+            fetchAndSetPosts(currentPage, type, searchPhrase);
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [currentPage, type, searchPhrase]);
 
     const handlePageChange = (page: number) => {
         if (page > 0 && page <= totalPages) {
@@ -68,10 +76,29 @@ export default function BlogPage() {
         }
     };
 
+    const handleTypeChange = () => {
+        setType(type === 'candidate' ? 'recruiter' : 'candidate');
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPhrase(e.target.value);
+    };
+
+    const clearSearch = () => {
+        setSearchPhrase("");
+    };
+
     return (
         <div>
+            <div className="flex flex-col md:flex-row justify-center items-center my-4 space-y-4 md:space-y-0 md:space-x-4">
+                <Search loading={loading}
+                        value={searchPhrase}
+                        onChange={handleSearchChange}
+                        onClear={clearSearch} />
+                <ContextSwitch type={type} onChange={handleTypeChange} />
+            </div>
             {loading ? (
-                <Spinner size={'lg'}/>
+                <Spinner size={'lg'} />
             ) : (
                 <PostList posts={posts} />
             )}
