@@ -22,7 +22,7 @@ const Paginator = ({
     return (
         <div className="flex justify-center my-4 items-center">
             <button
-                className="px-3 py-1 mx-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+                className="px-3 py-1 mx-1 bg-orange-500 text-white rounded disabled:bg-gray-400"
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1 || loading}
             >
@@ -39,7 +39,7 @@ const Paginator = ({
                 />
                 <span className="mx-2">from {totalPages}</span>
                 <button
-                    className="ml-2 px-3 py-1 bg-blue-500 text-white disabled:bg-gray-400 rounded"
+                    className="ml-2 px-3 py-1 bg-orange-500 text-white disabled:bg-gray-400 rounded"
                     onClick={onPageSubmit}
                     disabled={loading}
                 >
@@ -47,7 +47,7 @@ const Paginator = ({
                 </button>
             </div>
             <button
-                className="px-3 py-1 mx-1 bg-blue-500 text-white rounded disabled:bg-gray-400"
+                className="px-3 py-1 mx-1 bg-orange-500 text-white rounded disabled:bg-gray-400"
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages || loading}
             >
