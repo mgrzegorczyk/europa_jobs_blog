@@ -1,6 +1,17 @@
-import PostList from "@/components/PostList";
+import PostList, {PostListItem} from "@/components/PostList";
 
-const fetchPosts = async (pageNumber: number) => {
+export interface PostListData {
+    categoryName: string,
+    countryEnum: string,
+    isNews: boolean,
+    isGeneralWorkingAbroadInformations: boolean,
+    items: PostListItem[],
+    itemsCount: number,
+    currentPage:number,
+    totalPages:number,
+}
+
+const fetchPosts = async (pageNumber: number): Promise<PostListData> => {
     const res = await fetch(`https://api.europa.jobs/blog?Type=candidate&pageNumber=${pageNumber}`);
     if (!res.ok) {
         throw new Error('Failed to fetch posts');
@@ -12,10 +23,12 @@ const fetchPosts = async (pageNumber: number) => {
 };
 
 
-export default async function Blog(){
+export default async function BlogPage(){
     const data = await fetchPosts(1);
 
     return (
-        <PostList posts={data.items}></PostList>
+        <PostList posts={
+            data.items
+        }/>
     );
 }

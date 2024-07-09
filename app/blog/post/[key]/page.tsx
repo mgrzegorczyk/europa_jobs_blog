@@ -1,25 +1,13 @@
-import Skeleton from "@/components/Skeleton";
+import PostDetails, {PostDetailsData} from "@/components/PostDetails";
+import {composeScalar} from "yaml/dist/compose/compose-scalar";
 
-interface Section {
-    type: string;
-    content: string;
-    alternativeText?: string | null;
-}
-
-interface Post {
-    title: string;
-    metaDescription: string;
-    mediaUrl?: string;
-    sections: Section[];
-}
-
-interface PostDetailProps {
+interface PostDetailsProps {
     params: {
         key: string;
     };
 }
 
-const fetchPost = async (key: string): Promise<Post> => {
+const fetchPost = async (key: string): Promise<PostDetailsData> => {
     const res = await fetch(`https://api.europa.jobs/blog/article/${key}`);
     if (!res.ok) {
         throw new Error('Failed to fetch post');
@@ -31,7 +19,7 @@ const fetchPost = async (key: string): Promise<Post> => {
     return res.json();
 };
 
-export default async function PostDetail({ params }: PostDetailProps) {
+export default async function PostByKey({ params }: PostDetailsProps) {
     const post = await fetchPost(params.key);
 
     if (!post) {
@@ -39,22 +27,8 @@ export default async function PostDetail({ params }: PostDetailProps) {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-5">
-            <h1 className="text-4xl font-bold mb-5">{post.title}</h1>
-            {post.mediaUrl && (
-                <img
-                    src={post.mediaUrl}
-                    alt={post.title}
-                    className="w-full max-w-4xl h-auto rounded-lg mb-5"
-                />
-            )}
-            {post.sections.map((section, index) => (
-                <div
-                    key={index}
-                    className="prose prose-lg mb-5"
-                    dangerouslySetInnerHTML={{ __html: section.content }}
-                />
-            ))}
-        </div>
+        <PostDetails params={
+            {postDetails: post}
+        }/>
     );
 }

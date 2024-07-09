@@ -1,6 +1,6 @@
 import Skeleton from "@/components/Skeleton";
 
-export default function Loading() {
+export default function LoadingBlog() {
     return <div>
         <Skeleton />
         <Skeleton />

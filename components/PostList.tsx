@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-interface Post {
+
+export interface PostListItem {
     id: number;
     title: string;
     key: string;
@@ -9,10 +10,10 @@ interface Post {
 }
 
 interface PostListProps {
-    posts: Post[];
+    posts: PostListItem[];
 }
 
-const PostList = ({ posts }: PostListProps) => {
+export default function PostList({ posts }: PostListProps) {
     if (!posts || posts.length === 0) {
         return <p className="text-center text-gray-500 mt-5">No posts available.</p>;
     }
@@ -39,5 +40,3 @@ const PostList = ({ posts }: PostListProps) => {
         </div>
     );
 };
-
-export default PostList;

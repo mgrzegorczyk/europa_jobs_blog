@@ -1,6 +1,6 @@
 import Skeleton from "@/components/Skeleton";
 
-export default function Loading() {
+export default function LoadingPostDetails() {
     return <div>
         <Skeleton />
     </div>
