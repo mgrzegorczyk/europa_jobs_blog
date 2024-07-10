@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import PostDetails, { PostDetailsData } from '@/components/PostDetails';
 import Link from "next/link";
 import Head from "next/head";
+import {Metadata} from "next";
 
 interface PostDetailsProps {
     params: {
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: PostDetailsProps): Promise<Me
         openGraph: {
             title: post.title,
             description: post.metaDescription,
-            url: `https://yourwebsite.com/posts/${params.key}`,
+            url: `https://api.europa.jobs/blog/article/${params.key}`,
             type: 'article',
             images: [
                 {
