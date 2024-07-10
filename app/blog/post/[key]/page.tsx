@@ -16,9 +16,6 @@ const fetchPost = async (key: string): Promise<PostDetailsData | null> => {
         return null;
     }
 
-    // TODO remove fetch timeout
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     return res.json();
 };
 

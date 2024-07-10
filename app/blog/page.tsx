@@ -18,13 +18,11 @@ export interface PostListData {
     totalPages: number;
 }
 
-const fetchPosts = async (pageNumber: number, type: string, searchPhrase: string): Promise<PostListData> => {
+const fetchPosts = async (pageNumber: number, type: 'candidate' | 'recruiter', searchPhrase: string): Promise<PostListData> => {
     const res = await fetch(`https://api.europa.jobs/blog?Type=${type}&pageNumber=${pageNumber}&searchPhrase=${searchPhrase}`);
     if (!res.ok) {
         throw new Error('Failed to fetch posts');
     }
-    // TODO remove fetch timeout
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     return res.json();
 };
 
@@ -34,16 +32,16 @@ export default function BlogPage() {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [inputPage, setInputPage] = useState<string>("1");
     const [loading, setLoading] = useState<boolean>(false);
-    const [type, setType] = useState<string>('candidate');
+    const [type, setType] = useState<'candidate' | 'recruiter'>('candidate');
     const [searchPhrase, setSearchPhrase] = useState<string>("");
 
-    const fetchAndSetPosts = async (pageNumber: number, type: string, searchPhrase: string) => {
+    const fetchAndSetPosts = async (pageNumber: number, type: 'candidate' | 'recruiter', searchPhrase: string) => {
         setLoading(true);
         try {
             const data = await fetchPosts(pageNumber, type, searchPhrase);
             setPosts(data.items);
             setCurrentPage(data.currentPage > 0 ? data.currentPage : 1);
-            setTotalPages(data.totalPages);
+            setTotalPages(data.totalPages > 0 ? data.totalPages : 1);
             setInputPage(String(data.currentPage > 0 ? data.currentPage : 1));
         } catch (error) {
             console.error('Failed to fetch posts', error);
