@@ -97,7 +97,9 @@ export default function BlogPage() {
                         value={searchPhrase}
                         onChange={handleSearchChange}
                         onClear={clearSearch} />
-                <ContextSwitch type={type} onChange={handleTypeChange} />
+                <ContextSwitch type={type}
+                               onChange={handleTypeChange}
+                               loading={loading} />
             </div>
             {loading ? (
                 <Spinner size={'lg'} />
