@@ -40,7 +40,7 @@ const PostByKey = async ({ params }: PostDetailsProps) => {
     return (
         <div className="container mx-auto p-4">
             <Link href="/blog">
-                <div className="inline-flex items-center bg-gray-500 text-white py-2 px-4 rounded mb-4 hover:bg-gray-600 transition duration-300">
+                <div className="inline-flex items-center bg-orange-500 text-white py-2 px-4 rounded mb-4 hover:text-orange-300 transition duration-300">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
