@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import PostDetails, { PostDetailsData } from '@/components/PostDetails';
 import Link from "next/link";
+import Head from "next/head";
 
 interface PostDetailsProps {
     params: {
@@ -29,6 +30,34 @@ export async function generateStaticParams() {
     }));
 }
 
+export async function generateMetadata({ params }: PostDetailsProps): Promise<Metadata> {
+    const post = await fetchPost(params.key);
+    if (!post) {
+        return {
+            title: "Post Not Found",
+            description: "The post you are looking for does not exist.",
+        };
+    }
+    return {
+        title: post.title,
+        description: post.metaDescription,
+        openGraph: {
+            title: post.title,
+            description: post.metaDescription,
+            url: `https://yourwebsite.com/posts/${params.key}`,
+            type: 'article',
+            images: [
+                {
+                    url: post.mediaUrl || 'default-image-url',
+                    width: 800,
+                    height: 600,
+                    alt: post.title,
+                },
+            ],
+        },
+    };
+}
+
 const PostByKey = async ({ params }: PostDetailsProps) => {
     const post = await fetchPost(params.key);
 
@@ -38,20 +67,31 @@ const PostByKey = async ({ params }: PostDetailsProps) => {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <Link href="/blog">
-                <div className="inline-flex items-center bg-orange-500 text-white py-2 px-4 rounded mb-4 hover:text-orange-300 transition duration-300">
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Back
-                </div>
-            </Link>
-            <PostDetails params={{ postDetails: post }} />
-        </div>
+        <>
+            <Head>
+                <title>{post.title}</title>
+                <meta name="description" content={post.metaDescription} />
+                <meta property="og:title" content={post.title} />
+                <meta property="og:description" content={post.metaDescription} />
+                <meta property="og:url" content={`https://yourwebsite.com/posts/${params.key}`} />
+                <meta property="og:type" content="article" />
+                <meta property="og:image" content={post.mediaUrl || 'default-image-url'} />
+            </Head>
+            <div className="container mx-auto p-4">
+                <Link href="/blog">
+                    <div className="inline-flex items-center bg-orange-500 text-white py-2 px-4 rounded mb-4 hover:text-orange-300 transition duration-300">
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back
+                    </div>
+                </Link>
+                <PostDetails params={{ postDetails: post }} />
+            </div>
+        </>
     );
 };
 
 export default PostByKey;
 
-export const revalidate = 10; // Revalidate every 10 seconds
+export const revalidate = 60; // Revalidate every 60 seconds
