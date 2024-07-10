@@ -32,7 +32,7 @@ export default function BlogPage() {
     const [posts, setPosts] = useState<PostListItem[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const [inputPage, setInputPage] = useState<string>("");
+    const [inputPage, setInputPage] = useState<string>("1");
     const [loading, setLoading] = useState<boolean>(false);
     const [type, setType] = useState<string>('candidate');
     const [searchPhrase, setSearchPhrase] = useState<string>("");
@@ -44,6 +44,7 @@ export default function BlogPage() {
             setPosts(data.items);
             setCurrentPage(data.currentPage > 0 ? data.currentPage : 1);
             setTotalPages(data.totalPages);
+            setInputPage(String(data.currentPage > 0 ? data.currentPage : 1));
         } catch (error) {
             console.error('Failed to fetch posts', error);
         } finally {
@@ -62,6 +63,7 @@ export default function BlogPage() {
     const handlePageChange = (page: number) => {
         if (page > 0 && page <= totalPages) {
             setCurrentPage(page);
+            setInputPage(String(page));
         }
     };
 

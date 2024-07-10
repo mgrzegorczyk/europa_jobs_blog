@@ -41,7 +41,7 @@ const Paginator = ({
                 <button
                     className="ml-2 px-3 py-1 bg-orange-500 text-white disabled:bg-gray-400 rounded"
                     onClick={onPageSubmit}
-                    disabled={loading}
+                    disabled={currentPage === totalPages || loading}
                 >
                     Go
                 </button>
