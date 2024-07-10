@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['ej-prod-2.fra1.digitaloceanspaces.com'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'ej-prod-2.fra1.digitaloceanspaces.com',
+            },
+        ],
     },
 };
 
